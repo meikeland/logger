@@ -2,6 +2,7 @@ package logger
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"time"
@@ -26,9 +27,10 @@ func LogRequest() gin.HandlerFunc {
 		endTime := time.Now()
 
 		// 日志格式
+		fmt.Println(endTime.Sub(startTime))
 		contextLogger := WithFields(Fields{
 			"status": c.Writer.Status(),
-			"elapse": endTime.Sub(startTime),
+			"elapse": fmt.Sprint(endTime.Sub(startTime)),
 			"ip":     c.ClientIP(),
 			"method": c.Request.Method,
 			"uri":    c.Request.RequestURI,
