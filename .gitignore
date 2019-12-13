@@ -19,3 +19,4 @@
 .idea/*
 .history
 *.log
+go.sum
