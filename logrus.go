@@ -3,6 +3,7 @@ package logger
 import (
 	"io"
 	"os"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -17,7 +18,7 @@ type logrusLogger struct {
 
 func getFormatter() logrus.Formatter {
 	return &logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05.999999",
+		TimestampFormat: time.RFC3339Nano,
 	}
 }
 
