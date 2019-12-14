@@ -14,7 +14,7 @@ config := logger.Config{
     AppendCaller:  true,
 }
 
-err := logger.New(config, "logrus") // 目前只支持logrus
+err := logger.New(config) // 目前只支持logrus
 if err != nil {
     log.Fatalf("Could not instantiate log %s", err.Error())
 }

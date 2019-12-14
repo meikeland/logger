@@ -27,7 +27,6 @@ func LogRequest() gin.HandlerFunc {
 		endTime := time.Now()
 
 		// 日志格式
-		fmt.Println(endTime.Sub(startTime))
 		contextLogger := WithFields(Fields{
 			"status": c.Writer.Status(),
 			"elapse": fmt.Sprint(endTime.Sub(startTime)),

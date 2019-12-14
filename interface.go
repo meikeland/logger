@@ -1,31 +1,14 @@
 package logger
 
-import "errors"
-
-const (
-	logrusEngine = "logrus" // logrus日志引擎的标识
+import (
+	"github.com/sirupsen/logrus"
 )
 
 // 全局的log对象
-var log Logger
+var log *logrus.Logger
 
 // Fields 以withfield形式打印的日志项
 type Fields map[string]interface{}
-
-var (
-	errUnsupportedEngine = errors.New("不支持的日志引擎")
-)
-
-// Logger 打印日志的标准接口
-type Logger interface {
-	Debugf(format string, args ...interface{})
-	Infof(format string, args ...interface{})
-	Warnf(format string, args ...interface{})
-	Errorf(format string, args ...interface{})
-	Fatalf(format string, args ...interface{})
-	Panicf(format string, args ...interface{})
-	WithFields(keyValues Fields) Logger
-}
 
 // Config 控制日志组件的打印信息
 type Config struct {
@@ -37,19 +20,14 @@ type Config struct {
 }
 
 //New 创建一个新的日志组件
-func New(config Config, engine string) error {
-	switch engine {
-	case logrusEngine:
-		logger, err := newLogrusLogger(config)
-		if err != nil {
-			return err
-		}
-		log = logger
-		return nil
-
-	default:
-		return errUnsupportedEngine
+func New(config Config) error {
+	logger, err := newLogrusLogger(config)
+	if err != nil {
+		return err
 	}
+
+	log = logger
+	return nil
 }
 
 // Debugf 打印调试日志
@@ -83,6 +61,14 @@ func Panicf(format string, args ...interface{}) {
 }
 
 // WithFields 以字段形式输出
-func WithFields(keyValues Fields) Logger {
-	return log.WithFields(keyValues)
+func WithFields(keyValues Fields) *logrus.Entry {
+	return log.WithFields(convertToLogrusFields(keyValues))
+}
+
+func convertToLogrusFields(fields Fields) logrus.Fields {
+	logrusFields := logrus.Fields{}
+	for index, val := range fields {
+		logrusFields[index] = val
+	}
+	return logrusFields
 }
